@@ -26,8 +26,8 @@ class GeminiService
     Maksimal 3 paragraf.
     ";
 
-        // PERBAIKAN: Menggunakan v1beta dan model gemini-1.5-pro
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key="
+        // PERBAIKAN: Menggunakan versi v1 stabil dan model universal gemini-pro
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key="
             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -45,7 +45,7 @@ class GeminiService
         ]);
 
         if (!$response->successful()) {
-            return $response->body(); // Menampilkan pesan error jika masih gagal
+            return $response->body(); 
         }
 
         return data_get(
@@ -76,8 +76,8 @@ Pertanyaan pengguna:
 Jawab dengan bahasa Indonesia.
 ";
 
-        // PERBAIKAN: Menggunakan v1beta dan model gemini-1.5-pro
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key="
+        // PERBAIKAN: Menggunakan versi v1 stabil dan model universal gemini-pro
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key="
         . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
