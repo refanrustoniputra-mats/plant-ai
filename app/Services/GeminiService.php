@@ -26,7 +26,8 @@ class GeminiService
     Maksimal 3 paragraf.
     ";
 
-       $url = "https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key="
+       // MENGUBAH MODEL MENJADI GEMINI PRO
+       $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key="
             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -94,8 +95,8 @@ Jawab dengan bahasa Indonesia.
 
 ";
 
-        $url =
-        "https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key="
+        // MENGUBAH MODEL MENJADI GEMINI PRO
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key="
         . config('services.gemini.api_key');
 
         $response = Http::post($url, [
