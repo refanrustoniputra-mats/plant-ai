@@ -26,7 +26,7 @@ class GeminiService
     Maksimal 3 paragraf.
     ";
 
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key="
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key="
             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -44,7 +44,7 @@ class GeminiService
         ]);
 
         if (!$response->successful()) {
-            return "Maaf, AI sedang sibuk. Silakan coba beberapa saat lagi.";
+            return "Error dari Google: " . ($response->json('error.message') ?? $response->body());
         }
 
         return data_get(
@@ -75,7 +75,7 @@ Pertanyaan pengguna:
 Jawab dengan bahasa Indonesia.
 ";
 
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key="
+        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key="
         . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -93,7 +93,7 @@ Jawab dengan bahasa Indonesia.
         ]);
 
         if (!$response->successful()) {
-            return "Maaf, AI sedang mengalami gangguan. Silakan coba lagi nanti.";
+            return "Error dari Google: " . ($response->json('error.message') ?? $response->body());
         }
 
         return data_get(
