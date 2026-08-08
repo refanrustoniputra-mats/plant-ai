@@ -27,8 +27,9 @@ class GeminiService
     ";
 
         // PERBAIKAN: Menggunakan model Gemini 3.1 Pro yang aktif saat ini (Jalur v1)
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-pro:generateContent?key="
-            . config('services.gemini.api_key');
+        // UBAH DI FUNGSI explainPlant
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key="
+             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -77,8 +78,9 @@ Jawab dengan bahasa Indonesia.
 ";
 
         // PERBAIKAN: Menggunakan model Gemini 3.1 Pro yang aktif saat ini (Jalur v1)
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-pro:generateContent?key="
-        . config('services.gemini.api_key');
+        // UBAH JUGA DI FUNGSI chatPlant
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key="
+             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
