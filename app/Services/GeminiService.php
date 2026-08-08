@@ -26,7 +26,7 @@ class GeminiService
     Maksimal 3 paragraf.
     ";
 
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key="
+       $url = "https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key="
             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -44,7 +44,7 @@ class GeminiService
         ]);
 
         if (!$response->successful()) {
-            return "Error dari Google: " . ($response->json('error.message') ?? $response->body());
+            return $response->body();
         }
 
         return data_get(
@@ -57,30 +57,49 @@ class GeminiService
     public function chatPlant($plant, $question)
     {
         $prompt = "
+
 Anda adalah ahli tanaman.
 
 Tanaman saat ini:
-Nama : {$plant->nama}
-Nama Latin : {$plant->nama_latin}
-Asal : {$plant->asal}
-Penyiraman : {$plant->penyiraman}
-Cahaya : {$plant->cahaya}
-Suhu : {$plant->suhu}
-Kelembapan : {$plant->kelembapan}
-Deskripsi : {$plant->deskripsi}
+
+Nama :
+{$plant->nama}
+
+Nama Latin :
+{$plant->nama_latin}
+
+Asal :
+{$plant->asal}
+
+Penyiraman :
+{$plant->penyiraman}
+
+Cahaya :
+{$plant->cahaya}
+
+Suhu :
+{$plant->suhu}
+
+Kelembapan :
+{$plant->kelembapan}
+
+Deskripsi :
+{$plant->deskripsi}
 
 Pertanyaan pengguna:
+
 {$question}
 
 Jawab dengan bahasa Indonesia.
+
 ";
 
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key="
+        $url =
+        "https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key="
         . config('services.gemini.api_key');
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post($url, [
+        $response = Http::post($url, [
+
             "contents"=>[
                 [
                     "parts"=>[
@@ -90,16 +109,12 @@ Jawab dengan bahasa Indonesia.
                     ]
                 ]
             ]
-        ]);
 
-        if (!$response->successful()) {
-            return "Error dari Google: " . ($response->json('error.message') ?? $response->body());
-        }
+        ]);
 
         return data_get(
             $response->json(),
-            'candidates.0.content.parts.0.text',
-            'AI tidak memberikan jawaban.'
+            'candidates.0.content.parts.0.text'
         );
     }
 }
