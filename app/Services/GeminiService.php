@@ -26,8 +26,8 @@ class GeminiService
     Maksimal 3 paragraf.
     ";
 
-       // MENGUBAH MODEL MENJADI GEMINI PRO
-       $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key="
+        // PERBAIKAN: Menggunakan v1beta dan model gemini-1.5-pro
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key="
             . config('services.gemini.api_key');
 
         $response = Http::withHeaders([
@@ -45,7 +45,7 @@ class GeminiService
         ]);
 
         if (!$response->successful()) {
-            return $response->body();
+            return $response->body(); // Menampilkan pesan error jika masih gagal
         }
 
         return data_get(
@@ -58,49 +58,31 @@ class GeminiService
     public function chatPlant($plant, $question)
     {
         $prompt = "
-
 Anda adalah ahli tanaman.
 
 Tanaman saat ini:
-
-Nama :
-{$plant->nama}
-
-Nama Latin :
-{$plant->nama_latin}
-
-Asal :
-{$plant->asal}
-
-Penyiraman :
-{$plant->penyiraman}
-
-Cahaya :
-{$plant->cahaya}
-
-Suhu :
-{$plant->suhu}
-
-Kelembapan :
-{$plant->kelembapan}
-
-Deskripsi :
-{$plant->deskripsi}
+Nama : {$plant->nama}
+Nama Latin : {$plant->nama_latin}
+Asal : {$plant->asal}
+Penyiraman : {$plant->penyiraman}
+Cahaya : {$plant->cahaya}
+Suhu : {$plant->suhu}
+Kelembapan : {$plant->kelembapan}
+Deskripsi : {$plant->deskripsi}
 
 Pertanyaan pengguna:
-
 {$question}
 
 Jawab dengan bahasa Indonesia.
-
 ";
 
-        // MENGUBAH MODEL MENJADI GEMINI PRO
-        $url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key="
+        // PERBAIKAN: Menggunakan v1beta dan model gemini-1.5-pro
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key="
         . config('services.gemini.api_key');
 
-        $response = Http::post($url, [
-
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post($url, [
             "contents"=>[
                 [
                     "parts"=>[
@@ -110,12 +92,16 @@ Jawab dengan bahasa Indonesia.
                     ]
                 ]
             ]
-
         ]);
+
+        if (!$response->successful()) {
+            return "Maaf, AI sedang mengalami gangguan. Silakan coba lagi nanti.";
+        }
 
         return data_get(
             $response->json(),
-            'candidates.0.content.parts.0.text'
+            'candidates.0.content.parts.0.text',
+            'AI tidak memberikan jawaban.'
         );
     }
 }
